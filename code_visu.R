@@ -63,6 +63,24 @@ all = filter(data, Sex=="Both sexes")
 
 # Laura
 
+all_obesity_country = filter(obesitycountries, Sex=="Both sexes")
+
+
+obesity_by_region = all_obesity_country %>% 
+  group_by(Region, Year) %>% 
+  summarise(TotalPopulation = sum(Population), AvgObesity = mean(Obesity)) %>%
+  filter(Region %in% c("ASIA (EX. NEAR EAST)", "EASTERN EUROPE", "LATIN AMER. & CARIB", "NEAR EST", "NORTHERN AFRICA", "NORTHERN AMERICA", "OCEANIA", "SUB-SAHARIAN AFRICA", "WESTERN EUROPE"))
+
+p = ggplot(obesity_by_region, aes(Year,AvgObesity* TotalPopulation,color=Region)) +
+    ggtitle("Obesity evolution from 1975 to 2016 by Region") +
+    geom_line(aes(linetype=Region, group=Region))+
+    scale_x_discrete(breaks = seq(1975, 2016, 10)) +
+    xlab('Dates') +
+    ylab('Obesity %')
+p
+
+
+
 # --------------------------------------------------------------------------------
 # 2 graphs : carte avec l'obésite par pays en 1975 et en 2016
 
