@@ -5,6 +5,14 @@ library(countrycode)  # convert country names and country codes
 library(lubridate)    # dealing with data easier
 library(RColorBrewer) # color palette
 
+library(tmap)         # package for maping
+library(tidyverse)    # functions that help get to tidy data
+
+# pas sure qu'ils soient utiles ??
+#library(sf)           # Simple Features
+#remotes::install_github("MaelTheuliere/variousdata")
+#library(variousdata)
+
 # --------------------------------------------------------------------------------
 # importation des données 
 data = read.csv("data/obesity-cleaned.csv",sep=",",header=T)
@@ -161,9 +169,34 @@ p
 # 2 graphs : carte avec l'obésite par pays en 1975 et en 2016
 
 # Carte Laura : 1975
+
+# ------------------------
 # Carte Marion : 2016
 
+# création d'un fichier avec taux d'obésité par pays en 2016
+obesity_2016 = filter(obesitycountries, Year=="2016")
+obesity_2016 = filter(obesity_2016, Sex=="Both sexes")
+
+# importation des données du monde nécessaire à la carto
+data("World") # du package tmap
+colnames(World) = c("CountryISO",colnames(World[-1]))
 
 
+# on fusionne les données du monde et notre dataset sur l'obésité en 2016 (grace à CountryISO)
+obesity_2016_world <- World %>%
+  left_join(obesity_2016)
+
+# carte choroplèthe selon l'obésité en 2016
+map_sdg_indicators <- obesity_2016_world %>% 
+  ggplot() + 
+  geom_sf(aes(fill = Obesity),color="white",size=.2)+
+  theme_minimal()+
+  theme(panel.background = element_rect(fill = "light blue"))+
+  
+  scale_fill_gradientn(colors = rev(col_strip))+
+  guides(fill = guide_colorbar(barwidth = 1))+
+  labs(title = "Obesity rates by country in 2016",
+       caption = "Data : Adult obesity by country in 2016.")
+map_sdg_indicators
 
 
