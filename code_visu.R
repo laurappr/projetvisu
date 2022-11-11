@@ -9,6 +9,7 @@ data = read.csv("data/obesity-cleaned.csv",sep=",",header=T)
 summary(data)
 
 #Import des données countries of the world
+countries = read.csv('data/countries of the world.csv', header = TRUE)
 
 data = data[,-1]
 data$Country = as.factor(data$Country)
@@ -23,6 +24,14 @@ data = data %>% rename(Obesity = Obesity....) %>%
   select(Country, Year, Sex,Obesity=ObesityPercentage, Std_Dvt)
 
 head(data)
+
+#on merge countries et data 
+
+#il faut d'abord renommer le nom des pays selon le même mode de notation (ici iso3c)
+
+countries = countries %>% mutate(CountryISO = countrycode(Country, origin="country.name", destination = "iso3c"), Region=trimws(Region)) 
+data = data %>% mutate(CountryISO =countrycode(Country, origin="country.name", destination = "iso3c"))
+obesitycountries <- left_join(data,countries, by= "CountryISO")
 
 # --------------------------------------------------------------------------------
 # Marion
