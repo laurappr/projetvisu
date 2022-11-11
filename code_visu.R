@@ -91,13 +91,48 @@ ggplot(all_year,
 
 all_obesity_country = filter(obesitycountries, Sex=="Both sexes")
 
-obesity_country_year = all_obesity_country[c("Country.x","Year","Population","Obesity")]
+df = all_obesity_country[c("Country.x","Year","Population","Obesity")]
+summary(df)
 
-obesite = obesity_country_year$Obesity
+# sup des données manquantes pour la pop
+df=df[!is.na(df$Population),]
 
-pop = 
+# calcul de la moyenne pondérée par an
+w_all_year = tapply(seq_along(df$Obesity),df$Year,
+       function(xx){return(weighted.mean(x=df$Obesity[xx],w=df$Population[xx]))})
 
-weighted.mean(obesity_country_year$Obesity,obesity_country_year$Population)
+w_all_year = as.data.frame(cbind(year=1975:2016,mean=w_all_year))
+w_all_year$year = as.factor(w_all_year$year)
+
+# convertion au format date
+w_all_year <- mutate(w_all_year, date = str_c(w_all_year$year, "01-01", sep = "-") %>% ymd())
+
+# representation graphique
+theme_strip <- theme_minimal()+
+  theme(axis.text.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.title = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.title = element_blank(),
+        axis.text.x = element_text(vjust = 3),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(size = 14, hjust=0.5, face = "bold"),
+        plot.caption = element_text(face = "italic", hjust=0.5))
+
+col_strip <- brewer.pal(11, "RdYlGn")
+
+ggplot(all_year,
+       aes(x = date, y = 1, fill = mean))+
+  geom_tile()+
+  scale_x_date(date_breaks = "6 years",
+               date_labels = "%Y",
+               expand = c(0, 0))+
+  scale_y_continuous(expand = c(0, 0))+
+  scale_fill_gradientn(colors = rev(col_strip))+
+  guides(fill = guide_colorbar(barwidth = 1))+
+  labs(title = "Obesity 1975-2016",
+       caption = "Data : Adult obesity, population-weighted by country, between 1975-2016.")+
+  theme_strip
 
 # --------------------------------------------------------------------------------
 # courbe d'évolution de l'obésite par continent 
