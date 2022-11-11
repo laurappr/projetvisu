@@ -28,6 +28,11 @@ head(data)
 # Marion
 
 # un graph moyenne mondiale de l'obésité selon les années (total, homme et femme)
+
+male = filter(obesity_data, Sex=="Male")
+female = filter(obesity_data, Sex=="Female")
+all = filter(obesity_data, Sex=="Both sexes")
+
 # pondéré par le nombre d'habitants : weighted.mean()
 # sans pondération
 
