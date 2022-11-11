@@ -29,8 +29,12 @@ head(data)
 
 #il faut d'abord renommer le nom des pays selon le même mode de notation (ici iso3c)
 
-countries = countries %>% mutate(CountryISO = countrycode(Country, origin="country.name", destination = "iso3c"), Region=trimws(Region)) 
-data = data %>% mutate(CountryISO =countrycode(Country, origin="country.name", destination = "iso3c"))
+countries = countries %>% 
+  mutate(CountryISO = countrycode(Country, origin="country.name", destination = "iso3c"), 
+         Region=trimws(Region)) 
+
+data = data %>% 
+  mutate(CountryISO =countrycode(Country, origin="country.name", destination = "iso3c"))
 obesitycountries <- left_join(data,countries, by= "CountryISO")
 
 # --------------------------------------------------------------------------------
