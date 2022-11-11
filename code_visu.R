@@ -89,19 +89,15 @@ ggplot(all_year,
 # -----------------------------------
 # pondéré par le nombre d'habitants : 
 
-all_bis = filter(obesitycountries, Sex=="Both sexes")
+all_obesity_country = filter(obesitycountries, Sex=="Both sexes")
 
-all_year_bis = all_bis %>%
-  group_by(Year) %>%
-  weighted.mean(Obesity,Population)
+obesity_country_year = all_obesity_country[c("Country.x","Year","Population","Obesity")]
 
-weighted.mean(all_bis$Obesity,all_bis$Population)
+obesite = obesity_country_year$Obesity
 
-# calcul de l'obesité moyenne par an : pondéré par pays
-weighted.mean(all_year_bis$mean,all_year_bis$Population)
+pop = 
 
-
-
+weighted.mean(obesity_country_year$Obesity,obesity_country_year$Population)
 
 # --------------------------------------------------------------------------------
 # courbe d'évolution de l'obésite par continent 
