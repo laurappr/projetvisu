@@ -7,6 +7,8 @@ library(ggplot2)
 data = read.csv("data/obesity-cleaned.csv",sep=",",header=T)
 summary(data)
 
+#Import des données countries of the world
+
 data = data[,-1]
 data$Country = as.factor(data$Country)
 data$Year = as.factor(data$Year)
