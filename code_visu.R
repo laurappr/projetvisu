@@ -65,6 +65,7 @@ all = filter(data, Sex=="Both sexes")
 
 all_obesity_country = filter(obesitycountries, Sex=="Both sexes")
 
+#voir pour rajouter les pays enlevés 
 
 obesity_by_region = all_obesity_country %>% 
   group_by(Region, Year) %>% 
@@ -76,7 +77,8 @@ p = ggplot(obesity_by_region, aes(Year,AvgObesity* TotalPopulation,color=Region)
     geom_line(aes(linetype=Region, group=Region))+
     scale_x_discrete(breaks = seq(1975, 2016, 10)) +
     xlab('Dates') +
-    ylab('Obesity %')
+    ylab('Obesity %') +
+    theme_minimal()
 p
 
 
