@@ -4,6 +4,8 @@ library(stringr)      # consistent wrappers for common string operations
 library(countrycode)  # convert country names and country codes
 library(lubridate)    # dealing with data easier
 library(RColorBrewer) # color palette
+library(viridis)      #color for daltonian
+
 
 # --------------------------------------------------------------------------------
 # importation des données 
@@ -123,7 +125,9 @@ p = ggplot(obesity_by_region, aes(Year,AvgObesity* TotalPopulation,color=Region)
     scale_x_discrete(breaks = seq(1975, 2016, 10)) +
     xlab('Dates') +
     ylab('Obesity %') +
-    theme_minimal()
+    theme_minimal() + 
+    scale_color_brewer(palette = "Dark2")
+
 p
 
 
