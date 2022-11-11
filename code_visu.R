@@ -1,7 +1,9 @@
-library(dplyr)
-library(ggplot2)
-library(stringr)
-library(countrycode)
+library(dplyr)        # grammar of data manipulation
+library(ggplot2)      # grammar of graphics
+library(stringr)      # consistent wrappers for common string operations
+library(countrycode)  # convert country names and country codes
+library(lubridate)    # dealing with data easier
+library(RColorBrewer) # color palette
 
 # --------------------------------------------------------------------------------
 # importation des données 
@@ -42,9 +44,12 @@ obesitycountries <- left_join(data,countries, by= "CountryISO")
 
 # un graph moyenne mondiale de l'obésité selon les années (total, homme et femme)
 
-male = filter(obesity_data, Sex=="Male")
-female = filter(obesity_data, Sex=="Female")
-all = filter(obesity_data, Sex=="Both sexes")
+male = filter(data, Sex=="Male")
+female = filter(data, Sex=="Female")
+all = filter(data, Sex=="Both sexes")
+
+# calculer par an le taux d'obésite (entre 1975 et 2016)
+
 
 # pondéré par le nombre d'habitants : weighted.mean()
 # sans pondération
