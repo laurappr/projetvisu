@@ -7,6 +7,14 @@ library(RColorBrewer) # color palette
 library(viridis)      #color for daltonian
 
 
+library(tmap)         # package for maping
+library(tidyverse)    # functions that help get to tidy data
+
+# pas sure qu'ils soient utiles ??
+#library(sf)           # Simple Features
+#remotes::install_github("MaelTheuliere/variousdata")
+#library(variousdata)
+
 # --------------------------------------------------------------------------------
 # importation des données 
 data = read.csv("data/obesity-cleaned.csv",sep=",",header=T)
@@ -91,19 +99,50 @@ ggplot(all_year,
 # -----------------------------------
 # pondéré par le nombre d'habitants : 
 
-all_bis = filter(obesitycountries, Sex=="Both sexes")
+all_obesity_country = filter(obesitycountries, Sex=="Both sexes")
 
-all_year_bis = all_bis %>%
-  group_by(Year) %>%
-  weighted.mean(Obesity,Population)
+df = all_obesity_country[c("Country.x","Year","Population","Obesity")]
+summary(df)
 
-weighted.mean(all_bis$Obesity,all_bis$Population)
+# sup des données manquantes pour la pop
+df=df[!is.na(df$Population),]
 
-# calcul de l'obesité moyenne par an : pondéré par pays
-weighted.mean(all_year_bis$mean,all_year_bis$Population)
+# calcul de la moyenne pondérée par an
+w_all_year = tapply(seq_along(df$Obesity),df$Year,
+       function(xx){return(weighted.mean(x=df$Obesity[xx],w=df$Population[xx]))})
 
+w_all_year = as.data.frame(cbind(year=1975:2016,mean=w_all_year))
+w_all_year$year = as.factor(w_all_year$year)
 
+# convertion au format date
+w_all_year <- mutate(w_all_year, date = str_c(w_all_year$year, "01-01", sep = "-") %>% ymd())
 
+# representation graphique
+theme_strip <- theme_minimal()+
+  theme(axis.text.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.title = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.title = element_blank(),
+        axis.text.x = element_text(vjust = 3),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(size = 14, hjust=0.5, face = "bold"),
+        plot.caption = element_text(face = "italic", hjust=0.5))
+
+col_strip <- brewer.pal(11, "RdYlGn")
+
+ggplot(all_year,
+       aes(x = date, y = 1, fill = mean))+
+  geom_tile()+
+  scale_x_date(date_breaks = "6 years",
+               date_labels = "%Y",
+               expand = c(0, 0))+
+  scale_y_continuous(expand = c(0, 0))+
+  scale_fill_gradientn(colors = rev(col_strip))+
+  guides(fill = guide_colorbar(barwidth = 1))+
+  labs(title = "Obesity 1975-2016",
+       caption = "Data : Adult obesity, population-weighted by country, between 1975-2016.")+
+  theme_strip
 
 # --------------------------------------------------------------------------------
 # courbe d'évolution de l'obésite par continent 
@@ -136,9 +175,34 @@ p
 # 2 graphs : carte avec l'obésite par pays en 1975 et en 2016
 
 # Carte Laura : 1975
+
+# ------------------------
 # Carte Marion : 2016
 
+# création d'un fichier avec taux d'obésité par pays en 2016
+obesity_2016 = filter(obesitycountries, Year=="2016")
+obesity_2016 = filter(obesity_2016, Sex=="Both sexes")
+
+# importation des données du monde nécessaire à la carto
+data("World") # du package tmap
+colnames(World) = c("CountryISO",colnames(World[-1]))
 
 
+# on fusionne les données du monde et notre dataset sur l'obésité en 2016 (grace à CountryISO)
+obesity_2016_world <- World %>%
+  left_join(obesity_2016)
+
+# carte choroplèthe selon l'obésité en 2016
+map_sdg_indicators <- obesity_2016_world %>% 
+  ggplot() + 
+  geom_sf(aes(fill = Obesity),color="white",size=.2)+
+  theme_minimal()+
+  theme(panel.background = element_rect(fill = "light blue"))+
+  
+  scale_fill_gradientn(colors = rev(col_strip))+
+  guides(fill = guide_colorbar(barwidth = 1))+
+  labs(title = "Obesity rates by country in 2016",
+       caption = "Data : Adult obesity by country in 2016.")
+map_sdg_indicators
 
 
