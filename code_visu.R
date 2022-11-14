@@ -214,14 +214,14 @@ colnames(World) = c("CountryISO",colnames(World[-1]))
 obesity_1975_world <- World %>%
   left_join(obesity_1975)
 
-# carte choroplèthe selon l'obésité en 2016
+# carte choroplèthe selon l'obésité en 1975
 map_sdg_indicators1 <- obesity_1975_world %>% 
   ggplot() + 
   geom_sf(aes(fill = Obesity),color="white",size=.2)+
   theme_minimal()+
   theme(panel.background = element_rect(fill = "light blue"))+
-  
-  scale_fill_gradientn(colors = rev(col_strip))+
+  scale_fill_gradientn(colors = rev(col_strip), limits = c(0, 40),
+                       breaks=c(10, 20, 30))+
   guides(fill = guide_colorbar(barwidth = 1))+
   labs(title = "Obesity rates by country in 1975",
        caption = "Data : Adult obesity by country in 1975.")
@@ -250,7 +250,8 @@ map_sdg_indicators2 <- obesity_2016_world %>%
   theme_minimal()+
   theme(panel.background = element_rect(fill = "light blue"))+
   
-  scale_fill_gradientn(colors = rev(col_strip))+
+  scale_fill_gradientn(colors = rev(col_strip),limits = c(0, 40),
+                       breaks=c(10, 20, 30))+
   guides(fill = guide_colorbar(barwidth = 1))+
   labs(title = "Obesity rates by country in 2016",
        caption = "Data : Adult obesity by country in 2016.")
