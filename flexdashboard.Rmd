@@ -3,9 +3,13 @@ title: "How is obesity evolving in the world? "
 author: "Marion Gundelwein & Laura Paper"
 output: 
   flexdashboard::flex_dashboard:
-    theme: 
+    theme:
       version: 4
-      bootswatch: minty
+      bg: "#FFFFFF" # couleur fond
+      fg: "#292828"  # couleur texte
+      primary: "#12BDBB" # couleur barre en haut
+      base_font: 
+        google: Prompt
     orientation: rows
     vertical_layout: fill
     navbar:
@@ -15,19 +19,9 @@ params:
 ---
 
 
-<style>                     
-.navbar {
-  background-color:#FA8F17;
-  border-color:#9D1C1C;
-}
-.navbar-brand {
-color:black!important;
-}
-
-</style>  
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.height=3, fig.width=4)
 ```
 
 ```{r lib, include=FALSE}
@@ -172,9 +166,9 @@ carte1 <- obesity_1975_world %>%
   theme(panel.background = element_rect(fill = "light blue"))+
   scale_fill_gradientn(colors = rev(col_strip), limits = c(0, 40),
                        breaks=c(10, 20, 30))+
-  guides(fill = guide_colorbar(barwidth = 1))+
-  labs(title = "Obesity rates by country in 1975",
-       caption = "Data : Adult obesity by country in 1975.")
+  guides(fill = guide_colorbar(barwidth = 1))#+
+  # labs(title = "Obesity rates by country in 1975",
+  #      caption = "Data : Adult obesity by country in 1975.")
 #carte1
 ```
 
@@ -197,14 +191,14 @@ carte2 <- obesity_2016_world %>%
   
   scale_fill_gradientn(colors = rev(col_strip),limits = c(0, 40),
                        breaks=c(10, 20, 30))+
-  guides(fill = guide_colorbar(barwidth = 1))+
-  labs(title = "Obesity rates by country in 2016",
-       caption = "Data : Adult obesity by country in 2016.")
+  guides(fill = guide_colorbar(barwidth = 1))#+
+  # labs(title = "Obesity rates by country in 2016",
+  #      caption = "Data : Adult obesity by country in 2016.")
 #carte2
 ```
 
 
-Preview {data-icon="fa-signal"}
+Preview {data-icon="fa fa-home fa-fw"}
 ===================================== 
 
 Row {data-height=400}
@@ -226,11 +220,12 @@ plot(plot2)
 Row {data-height=600}
 -------------------------------------
     
-### Maps of the evolution of obesity
+### Map 
 
-```{r preview carte1 et carte2}
-#,fig.width=15, fig.height=12
-grid.arrange(carte1, carte2, nrow = 1)
+```{r preview carte1, fig.align="center",fig.height=18, fig.width=24}
+# plot(carte1)
+# plot(carte2)
+grid.arrange(carte1,carte2,nrow=1)
 ```
 
 
@@ -252,13 +247,14 @@ Evolution by continent  {data-icon="fa-signal"}
 plot(plot2)
 ```
 
-Maps {data-icon="fa-signal"}
+Maps {data-icon="fa-globe"}
 =====================================     
 
-### Maps of the evolution of obesity
+### Map 
 
-```{r carte1 et carte2}
-grid.arrange(carte1, carte2, nrow = 1) #top = "Maps of the evolution of obesity"
+```{r carte2, fig.align="center"}
+plot(carte1)
+plot(carte2)
 ```
 
 

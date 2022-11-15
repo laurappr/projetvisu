@@ -173,4 +173,5 @@ map_sdg_indicators2
 
 plot_grid(map_sdg_indicators1, map_sdg_indicators2, labels=c("1975", "2016"), ncol = 2, nrow = 1)
 
+grid.arrange(map_sdg_indicators1,map_sdg_indicators2,nrow=1)
 
