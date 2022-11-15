@@ -1,21 +1,15 @@
-library(dplyr)        # grammar of data manipulation
-library(ggplot2)      # grammar of graphics
-library(stringr)      # consistent wrappers for common string operations
-library(countrycode)  # convert country names and country codes
-library(lubridate)    # dealing with data easier
-library(RColorBrewer) # color palette
-library(viridis)      #color for daltonian
-
-library(tmap)         # package for maping
-library(tidyverse)    # functions that help get to tidy data
-
-library("gridExtra") #package pour fusionner des graphes
-library("cowplot")   # package pour fusionner des graphes
-
-# pas sure qu'ils soient utiles ??
-#library(sf)           # Simple Features
-#remotes::install_github("MaelTheuliere/variousdata")
-#library(variousdata)
+library(tidyverse)        # functions that help get to tidy data
+library(dplyr)            # grammar of data manipulation
+library(ggplot2)          # grammar of graphics
+library(stringr)          # consistent wrappers for common string operations
+library(countrycode)      # convert country names and country codes
+library(lubridate)        # dealing with data easier
+library(RColorBrewer)     # color palette
+library(viridis)          # color for daltonian
+library(tmap)             # package for maping
+library("gridExtra")      # package pour fusionner des graphes
+library("cowplot")        # package pour fusionner des graphes
+library("flexdashboard")  # create a flexdashboard
 
 # --------------------------------------------------------------------------------
 # importation des données 
@@ -48,13 +42,8 @@ colnames(World) = c("CountryISO",colnames(World[-1]))
 obesitycountries2 <- left_join(data, World, by= "CountryISO")
 
 # --------------------------------------------------------------------------------
-# Marion
 
 # un graph moyenne mondiale de l'obésité selon les années (total, homme et femme)
-
-male = filter(data, Sex=="Male")
-female = filter(data, Sex=="Female")
-all = filter(data, Sex=="Both sexes")
 
 # -----------------------------------
 # pondéré par le nombre d'habitants : 
@@ -107,10 +96,10 @@ ggplot(w_all_year,
 # --------------------------------------------------------------------------------
 # courbe d'évolution de l'obésite par continent 
 
-## 1 avec dataset World et région non continents
+# 1 avec dataset World et région non continents
 all_obesity_country = filter(obesitycountries2, Sex=="Both sexes")
 
-#voir pour rajouter les pays enlevés 
+# voir pour rajouter les pays enlevés 
 
 obesity_by_region = all_obesity_country %>% 
   group_by(continent, Year) %>% 
@@ -131,7 +120,7 @@ p2
 # --------------------------------------------------------------------------------
 # 2 graphs : carte avec l'obésite par pays en 1975 et en 2016
 
-# Carte Laura : 1975
+# Carte 1975 --------------------
 
 # création d'un fichier avec taux d'obésité par pays en 1975
 obesity_1975 = filter(obesitycountries2, Year=="1975")
@@ -154,8 +143,8 @@ map_sdg_indicators1 <- obesity_1975_world %>%
        caption = "Data : Adult obesity by country in 1975.")
 map_sdg_indicators1
 
-# ------------------------
-# Carte Marion : 2016
+# ------------------------------
+# Carte 2016 ---------------
 
 # création d'un fichier avec taux d'obésité par pays en 2016
 obesity_2016 = filter(obesitycountries2, Year=="2016")
