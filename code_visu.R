@@ -146,9 +146,9 @@ map_sdg_indicators1 <- obesity_1975_world %>%
   theme(panel.background = element_rect(fill = "light blue"))+
   scale_fill_gradientn(colors = rev(col_strip), limits = c(0, 40),
                        breaks=c(10, 20, 30))+
-  guides(fill = guide_colorbar(barwidth = 1))+
-  labs(title = "Obesity rates by country in 1975",
-       caption = "Data : Adult obesity by country in 1975.")
+  guides(fill = guide_colorbar(barwidth = 1))
+  #labs(title = "Obesity rates by country in 1975",
+       #caption = "Data : Adult obesity by country in 1975.")
 map_sdg_indicators1
 
 # ------------------------------
@@ -171,9 +171,9 @@ map_sdg_indicators2 <- obesity_2016_world %>%
   
   scale_fill_gradientn(colors = rev(col_strip),limits = c(0, 40),
                        breaks=c(10, 20, 30))+
-  guides(fill = guide_colorbar(barwidth = 1))+
-  labs(title = "Obesity rates by country in 2016",
-       caption = "Data : Adult obesity by country in 2016.")
+  guides(fill = guide_colorbar(barwidth = 1))
+  #labs(title = "Obesity rates by country in 2016",
+       #caption = "Data : Adult obesity by country in 2016.")
 map_sdg_indicators2
 
 # On combine les 2 graphes
@@ -181,4 +181,4 @@ map_sdg_indicators2
 
 plot_grid(map_sdg_indicators1, map_sdg_indicators2, labels=c("1975", "2016"), ncol = 2, nrow = 1)
 
-
+grid.arrange(map_sdg_indicators1, map_sdg_indicators2, ncol=2, nrow=1)
