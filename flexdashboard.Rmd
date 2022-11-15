@@ -1,27 +1,48 @@
 ---
-title: "How is obesity evolving in the world? "
-author: "Marion Gundelwein & Laura Paper"
+title: "How is obesity evolving in the world?"
+author: "(M. Gundelwein & L. Paper)"
 output: 
   flexdashboard::flex_dashboard:
-    theme:
-      version: 4
-      bg: "#FFFFFF" # couleur fond
-      fg: "#292828"  # couleur texte
-      primary: "#12BDBB" # couleur barre en haut
-      base_font: 
-        google: Prompt
-    orientation: rows
+    theme: bootstrap
+    orientation: columns
     vertical_layout: fill
     navbar:
-      - { title: "Data", href: "https://www.kaggle.com/datasets/amanarora/obesity-among-adults-by-country-19752016", align: left }
+      - { title: "Données :", align: right }
+      - { icon: "fas fa-upload", href: "https://www.kaggle.com/datasets/amanarora/obesity-among-adults-by-country-19752016", align: right }
 params:
   setup_path: ../resources/
 ---
 
+<style>                     
+.navbar {
+background-color: #62B1DF;
+border-color: #215D80;
+}
+.navbar-brand {
+color: white!important;
+}
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    color: white;
+    background-color: #8EC7E8;
+    font-weight: bold;
+}
+.fa {
+color: white;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+color: white;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+color: white;
+}
+</style>   
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(fig.height=3, fig.width=4)
+#knitr::opts_chunk$set(fig.height=3, fig.width=4)
 ```
 
 ```{r lib, include=FALSE}
@@ -166,9 +187,9 @@ carte1 <- obesity_1975_world %>%
   theme(panel.background = element_rect(fill = "light blue"))+
   scale_fill_gradientn(colors = rev(col_strip), limits = c(0, 40),
                        breaks=c(10, 20, 30))+
-  guides(fill = guide_colorbar(barwidth = 1))#+
-  # labs(title = "Obesity rates by country in 1975",
-  #      caption = "Data : Adult obesity by country in 1975.")
+  guides(fill = guide_colorbar(barwidth = 1))+
+  labs(title = "Obesity rates by country in 1975",
+       caption = "Data : Adult obesity by country in 1975.")
 #carte1
 ```
 
@@ -191,14 +212,14 @@ carte2 <- obesity_2016_world %>%
   
   scale_fill_gradientn(colors = rev(col_strip),limits = c(0, 40),
                        breaks=c(10, 20, 30))+
-  guides(fill = guide_colorbar(barwidth = 1))#+
-  # labs(title = "Obesity rates by country in 2016",
-  #      caption = "Data : Adult obesity by country in 2016.")
+  guides(fill = guide_colorbar(barwidth = 1))+
+  labs(title = "Obesity rates by country in 2016",
+       caption = "Data : Adult obesity by country in 2016.")
 #carte2
 ```
 
 
-Preview {data-icon="fa fa-home fa-fw"}
+Preview {data-icon="fas fa-home"}
 ===================================== 
 
 Row {data-height=400}
@@ -222,11 +243,48 @@ Row {data-height=600}
     
 ### Map 
 
-```{r preview carte1, fig.align="center",fig.height=18, fig.width=24}
-# plot(carte1)
-# plot(carte2)
-grid.arrange(carte1,carte2,nrow=1)
+```{r preview carte1}
+grid.arrange(carte1, carte2, nrow = 2, ncol=1)
 ```
+
+Explanations {data-icon="fas fa-wrench"}
+=====================================     
+
+### Explanation of the data set
+
+We use a dataset from _Kaggle_ to study obesity over time. 
+
+According to the WHO, a person is overweight when his or her body mass index (BMI) is above 25 and obese when it is above 30. The problem has reached epidemic proportions as of 2017, more than 4 million people were dying each year from overweight or obesity, according to a Global Burden of Disease study.
+
+<br/>
+
+<center>
+![](www/bmi-600x315.jpg){width=50%}
+</center>
+
+<br/>
+
+The dataset has 6 variables: 
+
+- country
+- the year 
+- BMI
+- the confidence interval
+- gender 
+
+
+Here is an extract from our obesity dataset:
+
+```{r echo=FALSE, out.width="90%"}
+knitr::kable(data[1:5,1:5])
+```    
+
+In order to be able to make maps we also imported the World dataset from R. This dataset allows us to have the names of the countries in ISO3 format and to obtain various information about the countries, such as the number of inhabitants. Here is an extract of the dataset:
+
+```{r echo=FALSE, out.width="90%"}
+knitr::kable(World[1:5,1:5])
+```   
+
 
 
 Global evolution {data-icon="fa-signal"}
@@ -252,9 +310,8 @@ Maps {data-icon="fa-globe"}
 
 ### Map 
 
-```{r carte2, fig.align="center"}
-plot(carte1)
-plot(carte2)
+```{r carte2}
+grid.arrange(carte1, carte2, nrow = 2)
 ```
 
 
